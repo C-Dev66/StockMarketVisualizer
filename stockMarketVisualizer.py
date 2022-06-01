@@ -8,7 +8,7 @@ url = 'https://companiesmarketcap.com/dow-jones/largest-companies-by-market-cap/
 
 response = requests.get(url)
 
-soup = BeautifulSoup(response.text)
+soup = BeautifulSoup(response.text, "html.parser")
 
 rows = soup.findChildren("tr")
 
@@ -32,8 +32,8 @@ for row in rows:
 
 
 labels = [f"{symbols[i]}\n({market_caps[i]})" for i in range(len(symbols))]
-colors = [plt.cm.tab20c(i / float(len(symbols))) for i in range(len(symbols))]
+#colors = [plt.cm.tab20c(i / float(len(symbols))) for i in range(len(symbols))]
 
-squarify.plot(sizes=sizes, label=labels, colors=colors, bar_kwargs={"linewidth": 0.5, "edgecolor": "111111"})
+squarify.plot(sizes=sizes, label=labels, bar_kwargs={"linewidth": 0.5, "edgecolor": "#111111"})
 
 plt.show()
