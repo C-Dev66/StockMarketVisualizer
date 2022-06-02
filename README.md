@@ -118,6 +118,6 @@ Useful Documentation:
 ---
 
 ## Demo
-![HomePage Gif](https://github.com/C-Dev66/HeadlineEmailerAutomation/blob/main/screenshots/headlineEmailer.png)
+![HomePage Gif](https://github.com/C-Dev66/StockMarketVisualizer/blob/main/screenshots/StockMarketVisualizer.png)
 
 
