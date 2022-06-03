@@ -1,7 +1,7 @@
 ,<img src="https://www.python.org/static/community_logos/python-logo-generic.svg" alt="HomePage"/>
 
 # StockMarketVisualizer
-> Scripting with Python! & Continuation of learning BeautifulSoup
+> Visualizing the biggest market cap companies in the Dow Jones index.
 ---
 
 ### Table of Contents:
@@ -18,7 +18,7 @@
 
 ## Description
 
-This python script will work as a webscrapper for fetching the top 30 stories of HackerNews. Composing and sending an automated email to the recipients from an authenticated account.
+This python script will work as a webscrapper for fetching the Dow Jones index companies and plotting by the biggest market cap.  Composing and sending an automated email to the recipients from an authenticated account.
 
 We will create a function to extract the page links (title/components) from the passed url. BeautifulSoup will group the content with it's find_all capability. Structure will then be added to the soup to view as a list.
 
