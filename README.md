@@ -18,20 +18,19 @@
 
 ## Description
 
-This python script will work as a webscrapper for fetching the Dow Jones index companies and plotting by the biggest market cap.  Composing and sending an automated email to the recipients from an authenticated account.
+This python script will work as a webscrapper for fetching the Dow Jones index companies and plotting by the biggest market cap.
 
-We will create a function to extract the page links (title/components) from the passed url. BeautifulSoup will group the content with it's find_all capability. Structure will then be added to the soup to view as a list.
+We will create a function to extract the page (title/components) from the passed url. BeautifulSoup will group the content with it's row.find capability. Structure will then be added to the soup to viewed as a plot by importing matplotlib & squairfy.
 
-Once the content is extracted we will compose the email by signing into the smtp server with credentials. Structure the subject line. Initiate connection and quit the server.
-
-Debbging can be viewed by setting the communication 'server.set_debuglevel(0-3)'
+Once the content is plotted we will add a color scheme to differeciate the market caps by monetary value.
 
 
 
 Depencies we will be using
 
-- BeautifulSoup
-- smtplib 
+- beautifulsoup
+- matplotlib as pyplot & plt/cm
+- squairfy
 - requests & datetime
 
 
@@ -39,80 +38,70 @@ Depencies we will be using
 
 ## Code Snippets
 
-> Creating the function that will extract news & build soup
+> Importing libraries/depencies & setting up variables
 ```python
-def extract_news(url):
-    print('Extracting Hacker News Stories...')
-    cnt = ''
-    cnt += ('<b>HN Top Stories:</b>\n'+'<br>'+'-'*50+'<br>')
-    responce = requests.get(url)
-    content = responce.content
-    soup = BeautifulSoup(content, 'html.parser')
-    for i,tag in enumerate(soup.find_all('td',attrs={'class':'title','valign':''})):
-        cnt += ((str(i+1)+' :: '+tag.text + "\n" + '<br>') if tag.text!='More' else '')
-        #print(tag.prettify) #find_all('span',attrs={'class':'sitestr'})
-    return(cnt)
+import requests
+from bs4 import BeautifulSoup
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as cm
+import squarify
 
-cnt = extract_news('https://news.ycombinator.com/')
-content += cnt
-content += ('<br>-------<br>')
-content +=('<br><br>End Of Message')
+url = 'https://companiesmarketcap.com/dow-jones/largest-companies-by-market-cap/'
+
+response = requests.get(url)
+
+soup = BeautifulSoup(response.text, "html.parser")
+
+rows = soup.findChildren("tr")
+
+symbols = []
+market_caps = []
+sizes = []
 ```
 
-> Composing the email & setting up smtp server
+> Creating the function to Structure Soup
 ```python
-print('Comosing Email...')
-
-SERVER = 'smtp.gmail.com' # "Your smtp SERVER"
-PORT = 587 # your port number
-FROM = '' # your from email id **Be Careful pusing this to repo**
-TO = '' # your to email id  **Becareful pushing this to repo**
-PASS = '' # your email id's password **Becareful pushing this to repo**
-
-# fp = open(file_name, 'rb')
-# Create a text/plain message
-# msg = MIMEText('')
-msg = MIMEMultipart()
-
-# msg.add_header('Content-Disposition', 'attachment', filename='empty.txt')
-msg['Subject'] = 'Top News Stories HN [Automated Email]' + ' ' + str(now.day) + '-' + str(now.month) + '-' + str(now.year)
-msg['From'] = FROM
-msg['To'] = TO
-
-msg.attach(MIMEText(content, 'html'))
-# fp.close()
+for row in rows:
+    try:
+        symbol = row.find("div", {"class": "company-code"}).text
+        market_cap = row.findAll('td')[2].text
+        market_caps.append(market_cap)
+        symbols.append(symbol)
+        
+        if market_cap.endswith("T"):
+            sizes.append(float(market_cap[1:-2]) * 10 ** 12)
+        elif market_cap.endswith("B"):
+            sizes.append(float(market_cap[1:-2]) * 10 ** 9)
+    except AttributeError:
+        pass
 ```
 
-> Connecting to client & loggin in
+> Adding the labels, colors & plotting on squairfy using matplotlib.plt
 ```dart
-print('Initiating Server...')
+labels = [f"{symbols[i]}\n({market_caps[i]})" for i in range(len(symbols))]
+colors = [plt.cm.tab20c(i / float(len(symbols))) for i in range(len(symbols))]
 
-server = smtplib.SMTP(SERVER, PORT)
-# sever=smtplib.SMTP SSL('smtp.gmail.com', 465)
-server.set_debuglevel(1)
-server.ehlo()
-server.starttls()
-#server.ehlo
-server.login(FROM, PASS)
-server.sendmail(FROM, TO, msg.as_string())
+squarify.plot(sizes=sizes, label=labels, bar_kwargs={"linewidth": 0.5, "edgecolor": "#111111"})
 
-print('Email Sent...')
-
-server.quit()
+plt.show()
 ```
 
 
 ---
 
 ## Summary
-Scripting is a powerful tool when used for automating mundane tasks. A webscrapper can be useful when wanting to pull information from a static webpage where html tags will not alter all that much. Providing these attributes to BeautifulSoup will build a collection of content(soup) where one can choose to filter and display/export. An excel sheet can also be used as a source to pull information from.
+Scripting is a powerful tool when used for automating mundane tasks. A webscrapper can be useful when wanting to pull information from a static webpage where html tags will not alter all that much. Providing these attributes to BeautifulSoup will build a collection of content(soup) where one can choose to filter and display/export.
+
+In this example we plot by the biggest monetary values to lowest. Giving depth by adding a color module showing a gradual change.
 
 Scripting is a must have tool in one's asernal. Looking forward to seeing what else I can automate :). 
 
 Useful Documentation:
 
 - [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#)
-- [SMTPLIB](https://docs.python.org/3/library/smtplib.html#smtp-objects)
+- [Requests](https://www.w3schools.com/python/module_requests.asp)
+- [Matplotlib](https://matplotlib.org/3.5.0/tutorials/introductory/pyplot.html)
+- [Squarify](https://www.analyticsvidhya.com/blog/2021/06/build-treemaps-in-python-using-squarify/)
 - [Microsoft Scripting](https://docs.microsoft.com/en-us/windows/python/scripting)
 
 ---
