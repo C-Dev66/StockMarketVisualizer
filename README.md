@@ -1,7 +1,7 @@
 ,<img src="https://www.python.org/static/community_logos/python-logo-generic.svg" alt="HomePage"/>
 
 # StockMarketVisualizer
-> Visualizing the biggest market cap companies in the Dow Jones index.
+> Visualizing the biggest market cap companies in the Dow Jones index. URL can be altered with provided link
 ---
 
 ### Table of Contents:
