@@ -94,7 +94,7 @@ Scripting is a powerful tool when used for automating mundane tasks. A webscrapp
 
 In this example we plot by the biggest monetary values to lowest. Giving depth by adding a color module showing a gradual change.
 
-Scripting is a must have tool in one's asernal. Looking forward to seeing what else I can automate :). 
+Scripting is a must have tool in one's asernal. Looking forward to seeing what else I can automate. 
 
 Useful Documentation:
 
